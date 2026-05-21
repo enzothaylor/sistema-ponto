@@ -24,3 +24,60 @@ def cadastro():
 
         nome = request.form["nome"]
         turma = request.form["turma"]
+
+        sql = """
+        INSERT INTO funcionarios (nome, turma)
+        VALUES (%s, %s)
+        """
+
+        cursor.execute(sql, (nome, turma))
+        conexao.commit()
+
+    return render_template("cadastro.html")
+
+@app.route("/bater-ponto", methods=["POST"])
+def bater_ponto():
+
+    funcionario_id = request.form["id"]
+
+    agora = datetime.now()
+
+    hora = agora.time()
+    data = agora.date()
+
+    sql = """
+    INSERT INTO registros
+    (funcionario_id, hora, data)
+    VALUES (%s, %s, %s)
+    """
+
+    cursor.execute(sql, (funcionario_id, hora, data))
+    conexao.commit()
+
+    return "Ponto registrado!"
+
+@app.route("/registros")
+def registros():
+
+    cursor.execute("""
+        SELECT
+        funcionarios.nome,
+        funcionarios.turma,
+        funcionarios.hora,
+        funcionarios.data
+
+        FROM registros
+
+        JOIN funcionarios
+        ON funcionarios.id = registros.funcionario_id
+    """)
+
+    dados = cursor.fetchall()
+
+    return render_template(
+        "registros.html",
+        dados=dados
+    )
+
+if __name___ == "__main__":
+    app.run(debug=True)
