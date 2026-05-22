@@ -1,0 +1,21 @@
+<table border="1">
+
+    <tr>
+        <th>Nome</th>
+        <th>Turma</th>
+        <th>Data</th>
+        <th>Hora</th>
+    </tr>
+    
+    {% for r in dados %}
+    
+    <tr>
+        <td>{{ r[0] }}</td>
+        <td>{{ r[1] }}</td>
+        <td>{{ r[2] }}</td>
+        <td>{{ r[3] }}</td>
+    </tr>
+    
+    {% endfor %}
+    
+    </table>
